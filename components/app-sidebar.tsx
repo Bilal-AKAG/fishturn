@@ -20,11 +20,23 @@ import {
 } from "@/components/ui/sidebar"
 
 const navItems = [
-  { title: "Dashboard", href: "/dashboard", icon: LayoutDashboardIcon },
+  { title: "Overview", href: "/dashboard", icon: LayoutDashboardIcon },
+  { title: "Kanban", href: "	/kanban", icon: LayoutDashboardIcon },
 ]
 
 export function AppSidebar() {
   const pathname = usePathname()
+
+  // Pick the nav item with the longest matching prefix of the pathname
+  const active = navItems.reduce<null | { href: string }>((best, item) => {
+    if (pathname === item.href) return item
+    if (
+      pathname.startsWith(item.href) &&
+      item.href.length > (best?.href?.length ?? 0)
+    )
+      return item
+    return best
+  }, null)
 
   return (
     <Sidebar collapsible="icon">
@@ -56,9 +68,7 @@ export function AppSidebar() {
           <SidebarGroupContent>
             <SidebarMenu>
               {navItems.map((item) => {
-                const isActive =
-                  pathname === item.href ||
-                  (item.href !== "/" && pathname.startsWith(item.href))
+                const isActive = active?.href === item.href
 
                 return (
                   <SidebarMenuItem key={item.href}>

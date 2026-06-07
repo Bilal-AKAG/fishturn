@@ -8,6 +8,13 @@
       "when": 1780841050907,
       "tag": "0000_fat_hitman",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1780845371399,
+      "tag": "0001_chubby_proudstar",
+      "breakpoints": true
     }
   ]
 }

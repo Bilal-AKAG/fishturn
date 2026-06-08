@@ -64,10 +64,10 @@ export function KanbanCard({ task, isOverlay = false }: KanbanCardProps) {
       ref={setNodeRef}
       style={style}
       className={cn(
-        "group relative flex flex-col gap-2 border-cyan-400  border-l-3 bg-card p-3",
+        "group relative flex flex-col gap-2 border-l-3  bg-card p-3",
         "shadow-xs transition-shadow hover:shadow-sm",
         isDragging && "opacity-40",
-        isOverlay && "rotate-1 cursor-grabbing shadow-lg opacity-95"
+        isOverlay && "rotate-1 cursor-grabbing opacity-95 shadow-lg"
       )}
     >
       {/* Drag handle + delete row */}
@@ -82,7 +82,7 @@ export function KanbanCard({ task, isOverlay = false }: KanbanCardProps) {
           <GripVerticalIcon className="size-3.5" />
         </button>
 
-        <p className="flex-1 text-sm font-medium leading-snug">{task.title}</p>
+        <p className="flex-1 text-sm leading-snug font-medium">{task.title}</p>
 
         <Button
           variant="ghost"

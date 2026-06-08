@@ -21,7 +21,7 @@ import {
 
 const navItems = [
   { title: "Overview", href: "/dashboard", icon: LayoutDashboardIcon },
-  { title: "Kanban", href: "	/kanban", icon: LayoutDashboardIcon },
+  { title: "Kanban", href: "/kanban", icon: LayoutDashboardIcon },
 ]
 
 export function AppSidebar() {
@@ -75,6 +75,7 @@ export function AppSidebar() {
                     <SidebarMenuButton
                       asChild
                       isActive={isActive}
+                      aria-current={isActive ? "page" : undefined}
                       tooltip={item.title}
                     >
                       <Link href={item.href}>

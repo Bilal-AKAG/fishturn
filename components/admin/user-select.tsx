@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { useRouter, useSearchParams } from "next/navigation"
+import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import { useQuery } from "@tanstack/react-query"
 import { CheckIcon, ChevronsUpDown } from "lucide-react"
 
@@ -41,6 +41,7 @@ function initials(name: string, email: string) {
 
 export function UserSelect() {
   const router = useRouter()
+  const pathname = usePathname()
   const searchParams = useSearchParams()
   const [open, setOpen] = React.useState(false)
 
@@ -57,15 +58,21 @@ export function UserSelect() {
   const selectedId = searchParams.get("userId") ?? users[0]?.id ?? ""
   const selected = users.find((u) => u.id === selectedId)
 
+  // Default to the first intern without leaving the current admin page
+  // (previously this always bounced to /admin, e.g. away from Announcements).
   React.useEffect(() => {
     if (!searchParams.has("userId") && users.length > 0) {
-      router.replace(`/admin?userId=${users[0].id}`)
+      const params = new URLSearchParams(searchParams.toString())
+      params.set("userId", users[0].id)
+      router.replace(`${pathname}?${params.toString()}`)
     }
-  }, [users, searchParams, router])
+  }, [users, searchParams, pathname, router])
 
   function onSelect(userId: string) {
     setOpen(false)
-    router.push(`/admin?userId=${userId}`)
+    const params = new URLSearchParams(searchParams.toString())
+    params.set("userId", userId)
+    router.push(`${pathname}?${params.toString()}`)
   }
 
   return (

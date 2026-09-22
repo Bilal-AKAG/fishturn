@@ -2,9 +2,10 @@
 
 import { usePathname } from "next/navigation"
 import Link from "next/link"
-import { HouseIcon, KanbanSquareIcon, MessageSquareIcon } from "lucide-react"
+import { KanbanSquareIcon, MegaphoneIcon } from "lucide-react"
 
 import { NavUser } from "@/components/nav-user"
+import { UserSelect } from "@/components/admin/user-select"
 import {
   Sidebar,
   SidebarContent,
@@ -20,15 +21,13 @@ import {
 } from "@/components/ui/sidebar"
 
 const navItems = [
-  { title: "Home", href: "/dashboard", icon: HouseIcon },
-  { title: "Kanban", href: "/kanban", icon: KanbanSquareIcon },
-  { title: "Feedback", href: "/feedback", icon: MessageSquareIcon },
+  { title: "Kanban", href: "/admin", icon: KanbanSquareIcon },
+  { title: "Announcements", href: "/admin/announcements", icon: MegaphoneIcon },
 ]
 
-export function AppSidebar() {
+export function AdminSidebar() {
   const pathname = usePathname()
 
-  // Pick the nav item with the longest matching prefix of the pathname
   const active = navItems.reduce<null | { href: string }>((best, item) => {
     if (pathname === item.href) return item
     if (
@@ -42,30 +41,14 @@ export function AppSidebar() {
   return (
     <Sidebar collapsible="icon">
       <SidebarHeader>
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <SidebarMenuButton size="lg" asChild>
-              <Link href="/dashboard">
-                <div className="flex aspect-square size-8 items-center justify-center rounded-md bg-sidebar-primary text-sidebar-primary-foreground">
-                  <span className="text-xs font-bold">FT</span>
-                </div>
-                <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-semibold">FishTurns</span>
-                  <span className="truncate text-xs text-muted-foreground">
-                    Dashboard
-                  </span>
-                </div>
-              </Link>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-        </SidebarMenu>
+        <UserSelect />
       </SidebarHeader>
 
       <SidebarSeparator />
 
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>Application</SidebarGroupLabel>
+          <SidebarGroupLabel>Admin</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {navItems.map((item) => {

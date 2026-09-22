@@ -15,6 +15,27 @@
       "when": 1780845371399,
       "tag": "0001_chubby_proudstar",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1780912779353,
+      "tag": "0002_wild_rage",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1782320645918,
+      "tag": "0003_sweet_moondragon",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1790106980072,
+      "tag": "0004_opposite_jean_grey",
+      "breakpoints": true
     }
   ]
 }

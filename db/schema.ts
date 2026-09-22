@@ -143,3 +143,24 @@ export const announcement = pgTable(
 	},
 	(table) => [index("announcement_createdAt_idx").on(table.createdAt)],
 );
+
+export const warning = pgTable(
+	"warning",
+	{
+		id: text("id").primaryKey(),
+		userId: text("user_id")
+			.notNull()
+			.references(() => user.id, { onDelete: "cascade" }),
+		title: text("title").notNull(),
+		message: text("message").notNull(),
+		createdBy: text("created_by")
+			.notNull()
+			.references(() => user.id, { onDelete: "cascade" }),
+		readAt: timestamp("read_at"),
+		createdAt: timestamp("created_at").defaultNow().notNull(),
+	},
+	(table) => [
+		index("warning_userId_idx").on(table.userId),
+		index("warning_createdAt_idx").on(table.createdAt),
+	],
+);

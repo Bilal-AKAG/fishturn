@@ -8,7 +8,7 @@ import { getSessionCookie } from "better-auth/cookies";
 // app/admin/layout.tsx, app/(dashboard)/layout.tsx and the API routes via
 // `auth.api.getSession()`.
 
-const PROTECTED_PREFIXES = ["/dashboard", "/kanban", "/feedback", "/admin"];
+const PROTECTED_PREFIXES = ["/dashboard", "/kanban", "/feedback", "/warnings", "/admin"];
 
 export function proxy(request: NextRequest) {
 	const { pathname } = request.nextUrl;
@@ -33,5 +33,5 @@ export function proxy(request: NextRequest) {
 }
 
 export const config = {
-	matcher: ["/dashboard/:path*", "/kanban/:path*", "/feedback/:path*", "/admin/:path*"],
+	matcher: ["/dashboard/:path*", "/kanban/:path*", "/feedback/:path*", "/warnings/:path*", "/admin/:path*"],
 };

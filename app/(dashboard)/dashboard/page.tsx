@@ -1,11 +1,19 @@
 "use client"
 
 import { useQuery } from "@tanstack/react-query"
-import { CircleCheckIcon, ListTodoIcon, MegaphoneIcon, TimerIcon } from "lucide-react"
+import Link from "next/link"
+import {
+  CircleCheckIcon,
+  ListTodoIcon,
+  MegaphoneIcon,
+  TimerIcon,
+  TriangleAlertIcon,
+} from "lucide-react"
 
 import { useSession } from "@/lib/auth-client"
 import { fetchTasks } from "@/lib/tasks"
 import { fetchAnnouncements } from "@/lib/announcements"
+import { fetchMyWarnings } from "@/lib/warnings"
 import { Badge } from "@/components/ui/badge"
 import {
   Card,
@@ -76,6 +84,11 @@ export default function DashboardPage() {
     queryKey: ["announcements"],
     queryFn: fetchAnnouncements,
   })
+  const { data: warnings = [] } = useQuery({
+    queryKey: ["warnings"],
+    queryFn: fetchMyWarnings,
+  })
+  const unreadWarnings = warnings.filter((w) => !w.readAt)
 
   const todo = tasks.filter((t) => t.status === "todo").length
   const inProgress = tasks.filter((t) => t.status === "in_progress").length
@@ -107,6 +120,24 @@ export default function DashboardPage() {
           Here&apos;s your task overview and the latest announcements.
         </p>
       </div>
+
+      {unreadWarnings.length > 0 && (
+        <Link
+          href="/warnings"
+          className="flex items-center gap-3 rounded-lg border border-destructive/40 bg-destructive/5 p-3"
+        >
+          <TriangleAlertIcon className="size-5 shrink-0 text-destructive" />
+          <div className="flex min-w-0 flex-1 flex-col">
+            <p className="text-sm font-medium">
+              You have {unreadWarnings.length} unread warning
+              {unreadWarnings.length > 1 ? "s" : ""}
+            </p>
+            <p className="truncate text-xs text-muted-foreground">
+              {unreadWarnings[0].title} — click to review and acknowledge.
+            </p>
+          </div>
+        </Link>
+      )}
 
       <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
         <StatCard label="Total tasks" value={total} icon={ListTodoIcon} loading={tasksLoading} />

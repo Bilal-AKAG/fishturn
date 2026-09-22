@@ -2,7 +2,7 @@
 
 import { usePathname } from "next/navigation"
 import Link from "next/link"
-import { KanbanSquareIcon, MegaphoneIcon, MessageSquareIcon } from "lucide-react"
+import { KanbanSquareIcon, MegaphoneIcon, MessageSquareIcon, UsersIcon } from "lucide-react"
 
 import { NavUser } from "@/components/nav-user"
 import { UserSelect } from "@/components/admin/user-select"
@@ -24,6 +24,7 @@ const navItems = [
   { title: "Kanban", href: "/admin", icon: KanbanSquareIcon },
   { title: "Announcements", href: "/admin/announcements", icon: MegaphoneIcon },
   { title: "Feedback", href: "/admin/feedback", icon: MessageSquareIcon },
+  { title: "Management", href: "/admin/management", icon: UsersIcon },
 ]
 
 export function AdminSidebar() {

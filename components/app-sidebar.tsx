@@ -1,10 +1,18 @@
 "use client"
 
-import { usePathname } from "next/navigation"
 import Link from "next/link"
-import { HouseIcon, KanbanSquareIcon, MessageSquareIcon } from "lucide-react"
+import { usePathname } from "next/navigation"
+import { useQuery } from "@tanstack/react-query"
+import {
+  HouseIcon,
+  KanbanSquareIcon,
+  MessageSquareIcon,
+  TriangleAlertIcon,
+} from "lucide-react"
 
+import { fetchMyWarnings } from "@/lib/warnings"
 import { NavUser } from "@/components/nav-user"
+import { Badge } from "@/components/ui/badge"
 import {
   Sidebar,
   SidebarContent,
@@ -23,10 +31,16 @@ const navItems = [
   { title: "Home", href: "/dashboard", icon: HouseIcon },
   { title: "Kanban", href: "/kanban", icon: KanbanSquareIcon },
   { title: "Feedback", href: "/feedback", icon: MessageSquareIcon },
+  { title: "Warnings", href: "/warnings", icon: TriangleAlertIcon },
 ]
 
 export function AppSidebar() {
   const pathname = usePathname()
+  const { data: warnings = [] } = useQuery({
+    queryKey: ["warnings"],
+    queryFn: fetchMyWarnings,
+  })
+  const unreadCount = warnings.filter((w) => !w.readAt).length
 
   // Pick the nav item with the longest matching prefix of the pathname
   const active = navItems.reduce<null | { href: string }>((best, item) => {
@@ -82,6 +96,14 @@ export function AppSidebar() {
                       <Link href={item.href}>
                         <item.icon />
                         <span>{item.title}</span>
+                        {item.href === "/warnings" && unreadCount > 0 && (
+                          <Badge
+                            variant="destructive"
+                            className="ml-auto h-5 min-w-5 justify-center px-1.5 text-xs"
+                          >
+                            {unreadCount}
+                          </Badge>
+                        )}
                       </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>

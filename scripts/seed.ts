@@ -13,7 +13,7 @@ import "dotenv/config";
 import { eq } from "drizzle-orm";
 import { auth } from "@/lib/auth";
 import { db } from "@/db";
-import { task, user } from "@/db/schema";
+import { task, user, warning } from "@/db/schema";
 
 const ADMIN_EMAIL = process.env.SEED_ADMIN_EMAIL ?? "admin@fishturns.local";
 const ADMIN_PASSWORD = process.env.SEED_ADMIN_PASSWORD ?? "Admin123!";
@@ -146,6 +146,23 @@ for (const intern of INTERNS) {
 
 for (const { email, id } of internIds) {
 	await ensureInternTasks(id, email);
+}
+
+// One demo warning so the warnings UI has something to show.
+const demoEmail = internIds[0].email;
+const existingWarnings = await db
+	.select({ id: warning.id })
+	.from(warning)
+	.where(eq(warning.userId, internIds[0].id));
+if (existingWarnings.length === 0) {
+	await db.insert(warning).values({
+		id: crypto.randomUUID(),
+		userId: internIds[0].id,
+		title: "Welcome aboard",
+		message: "This is a sample warning so you can see how warnings look. Acknowledge it from your Warnings page.",
+		createdBy: adminId,
+	});
+	console.log(`Created demo warning for ${demoEmail}.`);
 }
 
 console.log("\nSeed complete:");

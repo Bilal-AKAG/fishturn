@@ -5,7 +5,7 @@ import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { LoaderCircleIcon } from "lucide-react"
 
-import { signIn } from "@/lib/auth-client"
+import { signIn, authClient } from "@/lib/auth-client"
 import { Button } from "@/components/ui/button"
 import {
   Card,
@@ -33,8 +33,16 @@ export default function LoginPage() {
     await signIn.email(
       { email, password, callbackURL: "/dashboard" },
       {
-        onSuccess: () => {
-          router.push("/dashboard")
+        onSuccess: async () => {
+          // Role-aware landing: admins go to /admin, interns to /dashboard.
+          // (Server layouts double-check the role, so this is just UX.)
+          try {
+            const { data } = await authClient.getSession();
+            const role = (data?.user as { role?: string } | undefined)?.role;
+            router.push(role === "admin" ? "/admin" : "/dashboard");
+          } catch {
+            router.push("/dashboard");
+          }
         },
         onError: (ctx) => {
           setError(ctx.error.message)
